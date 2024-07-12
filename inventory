@@ -1,11 +1,14 @@
 # Inventory File for Ansible
-
+#
 # This file is to be used to list all the host ips or hostnames of the servers
 # you want to manage with Ansible
 # Just list the ips of all host systems you want managed
-
+#
 # 172.16.250.132
 # node1.domain2.example.co
 #
-redhat-vm1.aws.loki.com
-redhat-vm2.aws.loki.com
+#redhat-vm1.aws.loki.com
+172.31.9.9
+#
+#redhat-vm2.aws.loki.com
+172.31.25.54
