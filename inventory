@@ -8,7 +8,8 @@
 # node1.domain2.example.co
 #
 #redhat-vm1.aws.loki.com
-172.31.9.9
+#172.31.9.9
 #
 #redhat-vm2.aws.loki.com
-172.31.25.54
+#172.31.25.54
+ec2-54-183-171-28.us-west-1.compute.amazonaws.com
