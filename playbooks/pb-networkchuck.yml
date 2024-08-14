@@ -1,0 +1,11 @@
+---
+
+  - name: iluvnano
+    hosts: aws-loki
+    become: true
+
+    tasks:
+      - name: Ensure nano is installed
+        yum:
+          name: nano
+          state: absent
