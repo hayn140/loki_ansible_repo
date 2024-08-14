@@ -4,27 +4,39 @@
   become: true
   tasks:
 
+  - name: Install Apache on Ubuntu
+    apt:
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+   #when: ansible_distribution in ["Debian", "Ubuntu"] if you had a mix of Debian and Ubuntu Servers
+
   - name: Install Apache package
     package:
       name: httpd
       state: latest
+    when: ansible_distribution == "RedHat"
+   #when: ansible_distribution == "RedHat" and ansible_distribution_version == "9"
+   #Use $ ansible awsloki -m gather_facts > to find variables to use when 'when' conditional
 
   - name: Start and Enable Apache with Systemd
     systemd:
       name: httpd
       state: started
       enabled: true
+    when: ansible_distribution == "RedHat"
 
   - name: Install firewalld
     package: 
       name: firewalld
       state: latest
+    when: ansible_distribution == "RedHat"
 
   - name: Start and Enable firewalld with Systemd
     systemd:
       name: firewalld
       state: started
       enabled: true
+    when: ansible_distribution == "RedHat"
 
   - name: Add http service to firewall
     firewalld:
@@ -32,3 +44,4 @@
       state: enabled
       immediate: true
       permanent: true
+    when: ansible_distribution == "RedHat"
