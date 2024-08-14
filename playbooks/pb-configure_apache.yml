@@ -1,0 +1,34 @@
+---
+- name: Configure Apache Service
+  hosts: awsloki
+  become: true
+  tasks:
+
+  - name: Install Apache package
+    package:
+      name: httpd
+      state: latest
+
+  - name: Start and Enable Apache with Systemd
+    systemd:
+      name: httpd
+      state: started
+      enabled: true
+
+  - name: Install firewalld
+    package: 
+      name: firewalld
+      state: latest
+
+  - name: Start and Enable firewalld with Systemd
+    systemd:
+      name: firewalld
+      state: started
+      enabled: true
+
+  - name: Add http service to firewall
+    firewalld:
+      service: http
+      state: enabled
+      immediate: true
+      permanent: true

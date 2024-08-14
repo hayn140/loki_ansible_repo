@@ -1,0 +1,24 @@
+---
+
+- name: Remove Apache configuration
+  hosts: awsloki
+  become: true
+  tasks:
+
+  - name: Stop Apache with Systemd
+    systemd:
+      name: httpd
+      state: stopped
+      enabled: false
+
+  - name: Uninstall Apache package
+    package:
+      name: httpd
+      state: absent
+
+  - name: Remove httpd service from firewalld
+    firewalld:
+      service: http
+      state: disabled
+      immediate: true
+      permanent: true
