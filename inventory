@@ -7,9 +7,11 @@
 # 172.16.250.132
 # node1.domain2.example.co
 #
-#redhat-vm1.aws.loki.com
-#172.31.9.9
+#rhvm1-ans.aws.loki.com
+172.31.9.9
 #
-#redhat-vm2.aws.loki.com
-#172.31.25.54
-ec2-54-183-171-28.us-west-1.compute.amazonaws.com
+#rhvm2.aws.loki.com
+172.31.4.135
+#
+#rhvm3.aws.loki.com
+172.31.8.102
