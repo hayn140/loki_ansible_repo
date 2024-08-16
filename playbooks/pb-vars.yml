@@ -1,0 +1,14 @@
+---
+
+- name: Experimenting with Playbook Variables
+  hosts: awsloki
+  become: true
+  vars:
+    package_name: "nano"
+  tasks:
+
+    - name: Install package only if the package is nano and the Distro is RedHat
+      dnf:
+        name: "{{ package_name }}"
+        state: installed
+      when: package_name == "nano" and ansible_distribution == "RedHat"
