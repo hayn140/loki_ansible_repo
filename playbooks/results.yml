@@ -13,4 +13,4 @@
   - name: print a message ONLY if echo file exists
     debug:
       msg: "The /usr/bin/echo file exists!"
-    when: echo_check.stat.exists
+    when: echo_check.stat.exists == True #This is a boolean (one or zero) not a string "True" 
