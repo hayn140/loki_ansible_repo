@@ -1,0 +1,86 @@
+---
+# Play 1: Targeting All servers
+- name: The following two tasks will target all nodes
+  hosts: all
+  become: true
+  pre_tasks: #This ensures that these tasks happen before anything else is run in the playbook. 
+
+  - name: Install updates on Ubuntu
+    tags: always
+    package:
+      upgrade: dist
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+  - name: Install updates on RedHat
+    tags: always
+    package:
+      update_only: yes
+      update_cache: yes
+    when: ansible_distribution == "RedHat"
+
+# Play 2: Targeting web-servers
+- name: The following tasks will target web_servers
+  hosts: web_servers
+  become: true
+  tasks:
+
+  - name: install apache and php for Ubuntu servers
+    tags: apache,apache2,ubuntu
+    apt:
+      name:
+        - apache2
+        - libapache2-mod-php
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+  - name: install apache and php for RedHat servers
+    tags: apache,httpd,redhat
+    dnf:
+      name:
+       - httpd
+       - php
+      state: latest
+    when: ansible_distribution == "RedHat"
+
+# Play 2.1: Managing files
+  - name: copy default html file for site
+    tags: apache,apache2,httpd
+    copy:
+      src: default_site.html  #This file is located in ~/loki_ansible_repo_aws/playbooks/files but the directory 'files' is already assumed so there's no need to put the full path here.
+      dest: /var/www/html/index.html
+      owner: root
+      group: root
+      mode: 0644
+
+# Play 3: Targeting db_servers
+- name: The following tasks will target db_servers
+  hosts: db_servers
+  become: true
+  tasks:
+
+  - name: Install mariadb package (Ubuntu)
+    tags: ubuntu,db,mariadb
+    package:
+      name: mariadb-server
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+  - name: Install mariadb package (RedHat)
+    tags: redhat,db,mariadb
+    package:
+      name: mariadb
+      state: latest
+    when: ansible_distribution == "RedHat"
+
+# Play 4: Targeting file_servers
+- name: The following tasks will target file_servers
+  tags: samba
+  hosts: file_servers
+  become: true
+  tasks:
+
+  - name: Install samba package
+    package:
+      name: samba
+      state: latest
