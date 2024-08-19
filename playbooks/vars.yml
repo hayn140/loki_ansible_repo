@@ -12,3 +12,10 @@
         name: "{{ package_name }}"
         state: installed
       when: package_name == "nano" and ansible_distribution == "RedHat"
+
+    - name: Install packages defined in inventory file
+      package:
+        name: 
+          - "{{ package_1 }}"   # Check /etc/ansible/hosts
+          - "{{ package_2 }}"
+        state: latest

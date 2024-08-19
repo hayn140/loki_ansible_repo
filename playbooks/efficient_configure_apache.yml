@@ -1,0 +1,42 @@
+---
+- name: Configure Apache Service
+  hosts: awsloki
+  become: true
+  tasks:
+
+  - name: Install Apache on Ubuntu
+    apt:
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+   #when: ansible_distribution in ["Debian", "Ubuntu"] if you had a mix of Debian and Ubuntu Servers
+
+  - name: Install Apache and firewalld in one play
+    dnf:
+      name: 
+        - httpd
+        - firewalld
+      state: latest
+      update_cache: yes
+    when: ansible_distribution in ["CentOS", "RedHat"]
+
+  - name: Start and Enable Apache with Systemd
+    systemd:
+      name: httpd
+      state: started
+      enabled: true
+    when: ansible_distribution in ["CentOS", "RedHat"]
+
+  - name: Start and Enable firewalld with Systemd
+    systemd:
+      name: firewalld
+      state: started
+      enabled: true
+    when: ansible_distribution in ["CentOS", "RedHat"]
+
+  - name: Add http service to firewall persistently  
+    firewalld:
+      service: http
+      state: enabled
+      immediate: true
+      permanent: true
+    when: ansible_distribution in ["CentOS", "RedHat"]
