@@ -6,30 +6,30 @@
   hosts: awsloki
   become: true
   vars:
-    username: 'tfleming'  # Defining this variable will allow you to change the username and use this one playbook to create any user you wish
+    dev_username: 'tfleming'  # Defining this variable will allow you to change the username and use this one playbook to create any user you wish
   tasks:
 
-  - name: Add user '{{ username }}], and set their password, and make sure account never expires
+  - name: Add user '{{ dev_username }}], and set their password, and make sure account never expires
     tags: useradd,redhat,centos
     user:
-      name: '{{ username }}'
+      name: '{{ dev_username }}'
       state: present
       password: $6$gizvRtzRm101.Rxd$CZD2qFvrIfw2of18M/eWvRQURfc8g8xEFaGjp.3Ri2/1u3BG7te3b8KTzNMJmXAH.aflsCkIKTcbLrn0Krbys0    # To generate a hashed password: $ openssl passwd -6 'chosen_password'
       expires: -1
 
-  - name: Copy Welcome File to '{{ username}}' home directory
+  - name: Copy Welcome File to '{{ dev_username}}' home directory
     tags: useradd,redhat,centos
     copy:
       src: welcome.txt
-      dest: /home/{{ username }}/welcome_dir/  # If you end with a /, and the directory doesn't exist, it will create the directory. If you end with a filename, the file path must already exist. 
-      owner: '{{ username }}'
-      group: '{{ username }}'
+      dest: /home/{{ dev_username }}/welcome_dir/  # If you end with a /, and the directory doesn't exist, it will create the directory. If you end with a filename, the file path must already exist. 
+      owner: '{{ dev_username }}'
+      group: '{{ dev_username }}'
       mode: 0664
       
   - name: Make Sure file exists
     tags: verify
     stat:
-      path: /home/{{ username }}/welcome_dir/welcome.txt
+      path: /home/{{ dev_username }}/welcome_dir/welcome.txt
     register: file_check
 
   - name: Verbose Verification
@@ -44,14 +44,14 @@
   hosts: awsloki
   become: true
   vars:
-    username: 'tfleming'
+    dev_username: 'tfleming'
   tasks:
 
-  - name: Copy aloha.jpg to '{{ username}}' home directory using full path
+  - name: Copy aloha.jpg to '{{ dev_username}}' home directory using full path
     tags: copy
     copy:
       src: /home/lalohikea/aloha.jpg
-      dest: /home/{{ username }}/ 
-      owner: '{{ username }}'
-      group: '{{ username }}'
+      dest: /home/{{ dev_username }}/ 
+      owner: '{{ dev_username }}'
+      group: '{{ dev_username }}'
       mode: 0664
