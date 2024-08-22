@@ -33,7 +33,7 @@
     unarchive:
       src: https://releases.hashicorp.com/terraform/1.9.4/terraform_1.9.4_linux_amd64.zip
       dest: /usr/local/bin
-      remote_src: yes #This tells ansible not to look in files directory, it's a remote source.
+      remote_src: true #This tells ansible not to look in files directory, it's a remote source.
       mode: 0755
       owner: root
       group: root
