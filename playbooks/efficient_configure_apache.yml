@@ -33,10 +33,24 @@
       enabled: true
     when: ansible_distribution in ["CentOS", "RedHat"]
 
-  - name: Add http service to firewall persistently  
+  - name: Add http and https service to firewall persistently  
     firewalld:
-      service: http
+      service: '{{ item }}'
       state: enabled
       immediate: true
       permanent: true
     when: ansible_distribution in ["CentOS", "RedHat"]
+    loop:
+      - http
+      - https
+
+  - name: Add ports 80 & 443 to firewall persistently  
+    firewalld:
+      port: '{{ item }}'
+      state: enabled
+      immediate: true
+      permanent: true
+    when: ansible_distribution in ["CentOS", "RedHat"]
+    loop:
+      - 80/tcp
+      - 443/tcp 
