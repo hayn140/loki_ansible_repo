@@ -1,5 +1,7 @@
 ---
 
+# Play 1
+
 - name: Add a user, set their password, set account to never expire and add welcome file to their home directory
   hosts: awsloki
   become: true
@@ -35,3 +37,21 @@
     debug:
       msg:  "The 'welcome.txt' file was copied!"
     when: file_check.stat.exists == true
+
+# Play 2 
+
+- name: Copy aloha.jpg file using full path
+  hosts: awsloki
+  become: true
+  vars:
+    username: 'tfleming'
+  tasks:
+
+  - name: Copy aloha.jpg to '{{ username}}' home directory using full path
+    tags: copy
+    copy:
+      src: /home/lalohikea/aloha.jpg
+      dest: /home/{{ username }}/ 
+      owner: '{{ username }}'
+      group: '{{ username }}'
+      mode: 0664
