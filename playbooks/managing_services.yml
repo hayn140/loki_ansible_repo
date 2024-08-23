@@ -1,0 +1,65 @@
+---
+
+- name: LearnLinuxTV Ansible Module 12 Managing Services
+  hosts: awsloki
+  become: true
+  tasks:
+
+  - name: Install apache on RHEL
+    ansible.builtin.package:
+      name: httpd
+      state: latest
+    when: ansible_distribution == 'RedHat'
+
+  - name: Start and Enable Apache
+    ansible.builtin.service:
+      name: httpd
+      state: started
+      enabled: true
+    when: ansible_distribution == 'RedHat'
+
+  - name: Add apache services to firewall
+    ansible.posix.firewalld:
+      service: '{{ item }}'
+      state: enabled
+      immediate: true
+      permanent: true
+    when: ansible_distribution == 'RedHat'
+    loop:
+      - http
+      - https
+
+  - name: Add apache ports to firewall
+    ansible.posix.firewalld:
+      port: '{{ item }}'
+      state: enabled
+      immediate: true
+      permanent: true
+    when: ansible_distribution == 'RedHat'
+    loop:
+      - 80/tcp
+      - 443/tcp
+
+  - name: Configure default website
+    ansible.builtin.copy:
+      src: default_site.html
+      dest: /var/www/html/index.html
+      owner: root
+      group: root
+      mode: 0644
+    when: ansible_distribution == 'RedHat'
+
+  - name: Change httpd email address for ServerAdmin
+    ansible.builtin.lineinfile:
+      path: /etc/httpd/conf/httpd.conf
+      regexp: '^ServerAdmin'
+      line: 'ServerAdmin hawaiianhayn140@gmail.com'
+      backup: true
+    when: ansible_distribution == 'RedHat'
+    register: httpd_verify_email_line
+
+  - name: Restart apache if email was changed
+    ansible.builtin.service:
+      name: httpd
+      state: restarted
+    when: httpd_verify_email_line.changed == true
