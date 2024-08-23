@@ -30,6 +30,8 @@
     ansible.posix.authorized_key:
       user: simone
       key: "ssh-rsa AAAAB#NzaC!yc..."  # Make sure to add the ssh public key you want here for simone
+      state: present
+      manage_dir: yes
 
   - name: Add sudoers file for simone
     copy:
@@ -37,3 +39,5 @@
       dest: /etc/sudoers.d/simone
       owner: root
       group: root
+      mode: 0440
+      backup: true
