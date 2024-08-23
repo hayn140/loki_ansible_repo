@@ -24,3 +24,16 @@
         - hawaii
       append: true
       expires: -1
+# The following tasks will configure the user 'simone' to be an ansible user that will be able to run ansible tasks int eh background because we want ansible to be fully automated
+
+  - name: Add SSH public key to simone authorized_key file
+    ansible.posix.authorized_key:
+      user: simone
+      key: "ssh-rsa AAAAB#NzaC!yc..."  # Make sure to add the ssh public key you want here for simone
+
+  - name: Add sudoers file for simone
+    copy:
+      src: sudoers_simone  # located in files/sudoers_simone
+      dest: /etc/sudoers.d/simone
+      owner: root
+      group: root
