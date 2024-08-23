@@ -1,0 +1,26 @@
+---
+
+- name: LearnLinuxTV Ansible Module 12 Adding Users & Bootstrapping
+  hosts: awsloki
+  become: true
+  tasks:
+
+  - name: Create group aloha and Hawaii
+    ansible.builtin.group:
+      name: '{{ item }}'
+      state: present
+      system: false
+    loop:
+      - aloha
+      - hawaii
+
+  - name: Create user simone & add her to groups aloha & hawaii
+    ansible.builtin.user:
+      name: simone
+      state: present
+      uid: 2000
+      groups:
+        - aloha
+        - hawaii
+      append: true
+      expires: -1
